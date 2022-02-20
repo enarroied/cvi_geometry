@@ -35,7 +35,7 @@ Parcels can be written in the "output_fail.csv" file for several reasosn :
 * The town file is not in the CADASTRE repertory :
 * In this case, just add it to repertory. **Make sure the file is decompressed** and that it has a .json extensin.
 
-* Main reason of failure during data association is that the Customs' file may not be up-to-date, sometimes, it can lack updates from over few years (Public service excellnce, my friend !). Here are some more or less common cases :
+* Main reason of failure during data association is that the Customs' file may not be up-to-date, sometimes, it can lack updates from over few years (Public service excellence, my friend !). Here are some more or less common cases :
   * The parcel changed number because the winegrower modified it (parcel splitted for example). New references can be used using Geoportail (geoportail.gouv.fr). If this happens for very little parcels, you can try drawing them with your GIS software and manually enter data. If the parcel was moodified recently, you can try downloading a older version of the land registry and place it in the CADASTRE folder.
   * Land Registry info changed for the whole town (or whole sections). Here your best option is to find a previous version of the land registry information.
   * Town does not exist anymore: This usually happens when 2 towns merge into one (usually, around municipal elections). You can either try to download an older version of the land registry, hen the town existed, or try using this piece of code into the script (after line 29) :
@@ -97,3 +97,9 @@ Ceci veut donc dire que le fichier de sortie put avoir beaucoup de parcelles sup
 C'est un inconvénient notable, mais mon expérience me montre qu'il vaut mieux avoir automatisé la tâche jusque là car elle rend le résultat final (générer un parcellaire complet) plus rapide s'il ne reste plus que des bouts de polygone à modifier avec un logiciel SIG.
 D'autre part, pour certaines utilisation, le résultat final est suffisant car les données de surface sont celles extraites dans le parcellaire des douanes.
 This means that the output file can have several overlapped parcels. 
+
+## Test output opened with QGis / Sortie du test ouverte avec QGis
+
+![Output 1](/test/output1.png)
+
+![Output 2](/test/output2.png)
