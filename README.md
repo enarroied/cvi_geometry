@@ -100,6 +100,6 @@ This means that the output file can have several overlapped parcels.
 
 ## Test output opened with QGis / Sortie du test ouverte avec QGis
 
-![Output 1](/test/output1.png)
+![Output 1](https://github.com/enarroied/cvi_geometry/blob/main/test/out1.png)
 
-![Output 2](/test/output2.png)
+![Output 2](https://github.com/enarroied/cvi_geometry/blob/main/test/out2.png)
