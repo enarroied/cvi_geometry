@@ -13,6 +13,42 @@ Download there all required JSON files from the open data platform of the French
 This data can be whole "departments" (Départements - a French administrative division) or single towns.
 Size of the files can be important (espacially for whole departments) and can impact performace. Data downloaded into this repertory should match the one from the pdfs files, wich is usually very easy to determine before starting the task by looking where the parcels are located (usually one single department).
 
+### Output files
+This script generates 2 output files :
+* output.csv
+It contains :
+  * Data from the custom's files :
+    * The CVI number associated to the parcel (a customs' id number referencing the wine grower)
+    * The locality (lieu-dit in French)
+    * INSEE code of the parcel (départment number + Town number + (Former town number) + Section + Parcel number)
+    * The kind of wine that can be produced
+    * The grape variety
+    * The area (in hectares)
+    * Year of planting
+    * Density
+  * Geographical data, with polygon coordinates in WKT format, wich allows use with GIS software
+* output_fail.csv
+This file contains data that could not be associated to land registry information
+
+### Known causes of failure during data association
+Parcels can be written in the "output_fail.csv" file for several reasosn :
+* The town file is not in the CADASTRE repertory :
+* In this case, just add it to repertory. **Make sure the file is decompressed** and that it has a .json extensin.
+
+* Main reason of failure during data association is that the Customs' file may not be up-to-date, sometimes, it can lack updates from over few years (Public service excellnce, my friend !). Here are some more or less common cases :
+  * The parcel changed number because the winegrower modified it (parcel splitted for example). New references can be used using Geoportail (geoportail.gouv.fr). If this happens for very little parcels, you can try drawing them with your GIS software and manually enter data. If the parcel was moodified recently, you can try downloading a older version of the land registry and place it in the CADASTRE folder.
+  * Land Registry info changed for the whole town (or whole sections). Here your best option is to find a previous version of the land registry information.
+  * Town does not exist anymore: This usually happens when 2 towns merge into one (usually, around municipal elections). You can either try to download an older version of the land registry, hen the town existed, or try using this piece of code into the script (after line 29) :
+  `if row[1][3:6] == "XXX" :
+                        insee_code = row[1][:2] + "YYY" + row[1][3:6] + row[1][-6:]`
+  **Where "XXX" is the INSEE code of disappeared town and "YYY" is the code of the new town**.
+
+### A word about the parcel generated
+Data in the customs's document references vines, wich can be planted (they usually are) only in certain parts of a land regstry parcel.
+This means that the output file can have several overlapped parcels. 
+This is inconvinient, but (my) experience has shown (me) that having this task automated up to this limit makes it way easier and faster to generate a complete parcel file by just modifieng layer corners with GIS software.
+Also, for some tasks, the output data can be directly used since the area column (surface) has the proper information from the customs' file.
+
 ## Description - Français
 Ce script génère des couches de polygones, au format CSV/WKT, en associant l'information contenue dans deux types de fichiers :
 * La Fiche de compte du CVI 'Casier Viticole Informatisé), en format pdf, qui est un document que tous les vignerons doivent avoir, édité par le service de la viticulture des Douanes
@@ -53,7 +89,11 @@ Il suffit donc de rajouter la commune (ou le département entier) dans le réper
   `if row[1][3:6] == "XXX" :
                         insee_code = row[1][:2] + "YYY" + row[1][3:6] + row[1][-6:]`
    **où "XXX" est le code de la commune ayant disparu et "YYY" est le code de la nouvelle commune**.
+   **Pensez aussi au "else" juste après...**.
 
 ### Au sujets des parcelles générées par le programme
-
-
+Les données dans le document des douanes référence des parcelles de vigne, qui peuvent être plantées (et c'est souvent le cas) dans des parties précises de la parcelle cadastrale. Une même parcelle cadastrale peut donc accueillir plusieurs bouts de parcelle de vigne...
+Ceci veut donc dire que le fichier de sortie put avoir beaucoup de parcelles superposées.
+C'est un inconvénient notable, mais mon expérience me montre qu'il vaut mieux avoir automatisé la tâche jusque là car elle rend le résultat final (générer un parcellaire complet) plus rapide s'il ne reste plus que des bouts de polygone à modifier avec un logiciel SIG.
+D'autre part, pour certaines utilisation, le résultat final est suffisant car les données de surface sont celles extraites dans le parcellaire des douanes.
+This means that the output file can have several overlapped parcels. 
