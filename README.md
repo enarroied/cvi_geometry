@@ -40,4 +40,20 @@ Ce fichier contient :
     * La densité de plantation
   * Les données géographiques, avec les coordonnées des polygones au format WKT, ce qui permet d'utiliser le fichier avec des logiciels SIG.
 * output_fail.csv
+Ce fichier contient les informations du parcellaire qui n'ont pas pu être associées aux informations du cadastre
+
+### Causes possibles d'échec dans l'association des données
+Les parcelles peuvent être inscrites dans le fichier "output_fail.csv" pour plusieurs raisons :
+* Il manque la commune dans le répertoire CADASTRE
+Il suffit donc de rajouter la commune (ou le département entier) dans le répertoire. **Vérifiez que le document téléchargé a bien été dézippé** et que son extension est ".json"
+* La principale raison d'échec dans l'Association des parcelles reste la mise à jour du document parcellaire douanier. L'information contenue dans les ficiers peut parfois avoir des non-mises à jour de plusieurs années (c'est de l'administration publique, my friend !). Voici quelques écarts communs et des pistes pour y remédier (+/- solutions manuelles...)
+  * La parcelle a été recadastrée par le vigneron (par exemple, suite à une division de la parcelle) : Vous pouvez trouver les nouvelles référence en utilisant le Geoportail (geoportail.gouv.fr). S'il s'agit de très peu de parcelles, vous pouvez les dessiner à la main avec un logiciel SIG. Si la modification est récente, peut-être pouvez-vous télécharger une verion plus ancienne du cadastre de la commune.
+  * La commune a été recadastrée : Dans ce cas, toutes les sectins et les pas parcelles d'une commune (ou partie de commune) ont changé. La meilleur option est d'essayer de retrouver une version du cadastre d'avant le changement
+  * La commune n'exite plus : Dans ce cas, la commune a probablement fusionné avec d'autres (les dates correspondent généralement aux élections municipales). Il faut essayer de retrouver une version ancienne de la commune ou essayer d'ajouter ce bout de code au script (après la ligne 29) :
+  `if row[1][3:6] == "XXX" :
+                        insee_code = row[1][:2] + "YYY" + row[1][3:6] + row[1][-6:]`
+   **où "XXX" est le code de la commune ayant disparu et "YYY" est le code de la nouvelle commune**.
+
+### Au sujets des parcelles générées par le programme
+
 
